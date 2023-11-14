@@ -1,8 +1,5 @@
 {
     "compilerOptions": {
-        "experimentalDecorators": true,
-        "paths": {
-            "@/*": ["./src/*"]
-          }
+        "experimentalDecorators": true
     }
 }

@@ -3,7 +3,7 @@ import { Modal, message } from 'antd';
 import api from '@/api/api';
 import { observer, inject } from 'mobx-react';
 const { confirm } = Modal;
-@inject('NanxTableStore')
+@inject('NanxTableStore') // 'myStore' 是你在Provider中提供的store名称
 @observer
 export default class DeleteData extends React.Component {
     constructor(props) {
@@ -31,6 +31,8 @@ export default class DeleteData extends React.Component {
             okType: 'danger',
             cancelText: '取消',
             onOk: () => {
+                console.log(this.props);
+
                 if (this.props.as_virtual == 'y') {
                     this.deleteVirtualData();
                     this.props.changeValue && this.props.changeValue(this.props.NanxTableStore.dataSource);
@@ -38,6 +40,9 @@ export default class DeleteData extends React.Component {
                 }
 
                 this.deleteData();
+            },
+            onCancel: () => {
+                console.log(this.props);
             }
         });
     }
@@ -63,7 +68,7 @@ export default class DeleteData extends React.Component {
         let json = await api.curd.deleteData(params);
 
         if (json.code == 200) {
-            this.props.afterDelteRefresh();
+            this.props.refreshTable();
         }
     }
 
