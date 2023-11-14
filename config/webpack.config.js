@@ -63,6 +63,8 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
+const chalk = require('react-dev-utils/chalk');
+
 const hasJsxRuntime = (() => {
     if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
         return false;
@@ -174,7 +176,7 @@ module.exports = function (webpackEnv) {
         return loaders;
     };
 
-    return {
+    let _webPackConfig = {
         target: ['browserslist'],
         // Webpack noise constrained to errors and warnings
         stats: 'errors-warnings',
@@ -708,4 +710,9 @@ module.exports = function (webpackEnv) {
         // our own hints via the FileSizeReporter
         performance: false
     };
+
+    console.log(chalk.yellow('全部配置'));
+    console.log(_webPackConfig.resolve);
+    // process.exit(0);
+    return _webPackConfig;
 };
