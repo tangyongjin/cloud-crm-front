@@ -13,7 +13,7 @@ class _MenuStore {
     // 系统所有菜单
     @observable AllMenuList = [];
     @observable AllMenuKeys = [];
-    @observable breadcrumb = '';
+    @observable breadcrumb = null;
     @observable menuPath = [];
 
     // 基于角色的菜单

@@ -45,8 +45,7 @@ export default class Login extends React.Component {
             <div className="auth-bg">
                 <div className="w3layouts-two-grids2">
                     <div id="sys-hero1">
-                        <h2>[Nanx+] AWS Management System</h2>
-                        <h3>数据库:NANX(12345678/12345678)</h3>
+                        <h2>光环云CRM-Demo(授权新网使用)</h2>
                     </div>
                     <div className="text-left-side">
                         <form action="#" method="post">
@@ -89,7 +88,7 @@ export default class Login extends React.Component {
                     </div>
 
                     <div id="sys-hero2">
-                        <h3>Low Code App Builder</h3>
+                        <h3>LowCode Builder</h3>
                     </div>
                 </div>
             </div>

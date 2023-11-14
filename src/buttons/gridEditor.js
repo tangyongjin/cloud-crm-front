@@ -88,6 +88,8 @@ class GridEditor extends React.Component {
         });
     };
 
+    //current_actcode
+
     render() {
         let xtitle = '编辑:' + this.DataGridStore.current_actcode;
 

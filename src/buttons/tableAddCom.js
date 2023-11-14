@@ -14,19 +14,15 @@ export default class TableAddCom extends React.Component {
         await this.props.NanxTableStore.showButtonModal();
     };
 
-    getGhostData = (formData) => {
-        this.props.NanxTableStore.triggers.foreach((item) => {
-            formData['ghost_' + item.props.trigger_cfg.as_select_field_id] =
-                formData[item.props.trigger_cfg.as_select_field_id];
-            let option_obj = item.state.optionList.find(
-                (optionItem) => optionItem.value == formData[item.props.trigger_cfg.as_select_field_id]
-            );
-            formData[item.props.trigger_cfg.as_select_field_id] = option_obj.label;
-        });
-        return formData;
-    };
+    saveFormData(fmdata) {
+        let data = {
+            DataGridCode: this.props.NanxTableStore.datagrid_code,
+            rawdata: fmdata
+        };
+        this.addGridData(data);
+    }
 
-    addRealApi = async (data) => {
+    addGridData = async (data) => {
         let params = { data: data, method: 'POST' };
         params.addurl = this.props.NanxTableStore.curd.addurl;
         let json = await api.curd.addData(params);
@@ -34,14 +30,6 @@ export default class TableAddCom extends React.Component {
             await this.props.refreshTable();
         }
     };
-
-    saveFormData(fmdata) {
-        let data = {
-            DataGridCode: this.props.NanxTableStore.datagrid_code,
-            rawdata: fmdata
-        };
-        this.addRealApi(data);
-    }
 
     render() {
         return (
