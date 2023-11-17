@@ -36,9 +36,18 @@ div.ant-modal-title > div > span {
     background-color: white !important;
     background: white !important;
     height: auto !important;
-    // overflow: scroll;
     min-width: 100vh;
 }
+
+.editor_table_wrapper {
+    padding: 10px 10px 0px 10px;
+    border: 0.5px dashed #2e940d;
+    background-color: white !important;
+    background: white !important;
+    height: auto !important;
+    min-width: 100vh;
+}
+
 
 .ant-table-wrapper::after {
     color: red;
@@ -79,6 +88,8 @@ div.ant-modal-title > div > span {
     border-radius: 0;
     background:  rgb(207, 201, 207) ;
 }
+
+// 错误信息屏蔽
 
 #webpack-dev-server-client-overlay {
     display: none !important;
@@ -131,4 +142,20 @@ div.ant-modal-title > div > span {
     display: flex;
     padding-right: 15px;
     justify-content: flex-end;
+}
+
+// message
+span.anticon.anticon-info-circle{
+    color: #035017 !important;
+}
+span.anticon.anticon-check-circle{
+    color: #035017 !important;
+}
+ 
+span.anticon.anticon-close-circle{
+    color: #191819 !important;
+}
+
+span.anticon.anticon-exclamation-circle{
+    color: #191819 !important;
 }

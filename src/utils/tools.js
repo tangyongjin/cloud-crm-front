@@ -157,5 +157,9 @@ export function findMenuPath(menu, key) {
 
     const path = [];
     const result = findPath(menu, key, path);
-    return result;
+    if (typeof result === 'undefined') {
+        return [];
+    } else {
+        return result;
+    }
 }

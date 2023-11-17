@@ -5,7 +5,7 @@ import listDataParams from '@/routes/NanxTable/NanxTableCom/listDataParams';
 import api from '@/api/api';
 import { toJS } from 'mobx';
 
-class _NanxTableStore {
+class _TableAsEditorStore {
     constructor() {
         autorun(() => {
             if (this.SERIALNO == null) {
@@ -120,7 +120,6 @@ class _NanxTableStore {
                 title: item.title,
                 dataIndex: item.key,
                 width: item.width && item.width != null && item.width != '' ? parseFloat(item.width) : 200,
-                // sorter: (a, b) => sorter(a[item.key], b[item.key]),
                 render: (text, record) => {
                     return CellRender(text, record, item, this);
                 }
@@ -155,18 +154,7 @@ class _NanxTableStore {
     @action getTableColumns = () => {};
     @action setTableColumns = (cols) => (this.tableColumns = cols);
 
-    @action hasTableEditor() {
-        for (let key in this.formCfg.properties) {
-            if (this.formCfg.properties[key].type === 'TableEditor') {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @action setFormCfg = (formCfg) => {
-        this.formCfg = formCfg;
-    };
+    @action setFormCfg = (formCfg) => (this.formCfg = formCfg);
 
     @action setReferinfo = (referinfo) => (this.referinfo = referinfo);
     @action setTips = (tips) => (this.tips = tips);
@@ -254,6 +242,5 @@ class _NanxTableStore {
     }
 }
 
-const NanxTableStore = new _NanxTableStore();
-
-export default NanxTableStore;
+const TableAsEditorStore = new _TableAsEditorStore();
+export default TableAsEditorStore;

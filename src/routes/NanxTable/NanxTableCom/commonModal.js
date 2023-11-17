@@ -14,7 +14,7 @@ export default class CommonModal extends React.Component {
         return (
             <Modal
                 maskClosable={false}
-                width={this.props.layoutcfg == '2' ? '1100px' : this.props.layoutcfg == '3' ? '1300px' : '650px'}
+                width={this.props.width || '650px'}
                 destroyOnClose={true}
                 title={this.props.title}
                 styles={{
@@ -25,7 +25,7 @@ export default class CommonModal extends React.Component {
                 open={this.props.NanxTableStore.buttonModalVisuble}
                 onCancel={this.props.NanxTableStore.hideButtonModal}
                 footer={[
-                    <Button key="submit" onClick={this.props.NanxTableStore.hideButtonModal}>
+                    <Button type="primary" key="submit" onClick={this.props.NanxTableStore.hideButtonModal}>
                         关闭
                     </Button>
                 ]}>

@@ -52,20 +52,21 @@ export default class TableEditCom extends React.Component {
     };
 
     render() {
+        let _width = '650px';
+        if (this.props.NanxTableStore.hasTableEditor()) {
+            _width = '1150px';
+        }
         return (
             <CommonModal
                 height="500px"
-                footer={null}
+                width={_width}
                 title={
                     <div>
                         <EditOutlined />
                         编辑
                     </div>
-                }
-                layoutcfg={this.props.NanxTableStore.layoutcfg}>
+                }>
                 <CommonTableForm
-                    as_virtual={this.props.as_virtual}
-                    editable={true}
                     onChange={this.props.onChange}
                     NanxTableStore={this.props.NanxTableStore}
                     saveFormData={this.saveFormData.bind(this)}

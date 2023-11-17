@@ -4,7 +4,10 @@
 const themeJson = {
     token: {
         colorPrimary: '#3B3B47',
-        colorInfo: '#3B3B47',
+        colorInfo: '#225e04',
+        colorError: '#225e04',
+        colorSuccess: '#225e04',
+        colorWarning: '#225e04',
         colorTextBase: '#000000ef',
         borderRadius: 3,
         headerPadding: '150px'
@@ -49,8 +52,9 @@ const themeJson = {
         Upload: {
             colorError: 'rgb(250, 84, 28)'
         },
+
         Message: {
-            colorWarning: 'rgb(82, 196, 26)'
+            contentBg: 'red'
         },
 
         Layout: {
@@ -63,7 +67,7 @@ const themeJson = {
         Button: {
             controlHeight: '30px',
             defaultBorderColor: '#366503',
-            primaryShadow: '0 10px 0px 0px #15ff000',
+            primaryShadow: '0 0 0 0 #15ff00',
             defaultShadow: '0px 0px 0px 0px #ffffff',
             defaultColor: 'white',
             colorBgContainer: '#3B3B47'
