@@ -70,10 +70,9 @@ export default class TriggerAddCom extends React.Component {
             <div style={{ marginLeft: '40px', marginTop: '30px' }}>
                 <div style={{ marginBottom: '10px' }}>联动组名称:</div>
                 <div style={{ marginBottom: '10px' }}>
-                    {' '}
                     <Input onChange={(event) => this.setGroupName(event)} />
                 </div>
-                <Row>
+                <Row align="bottom">
                     <Col span={2}>
                         <Button type="default" htmlType="submit" onClick={this.increateCounter.bind(this)}>
                             添加

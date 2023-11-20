@@ -1,6 +1,3 @@
-// colorPrimary: '#225e04',
-// colorInfo: '#225e04',
-
 const themeJson = {
     token: {
         colorPrimary: '#3B3B47',
@@ -9,29 +6,14 @@ const themeJson = {
         colorSuccess: '#225e04',
         colorWarning: '#225e04',
         colorTextBase: '#000000ef',
-        borderRadius: 3,
-        headerPadding: '150px'
+        borderRadius: 4,
+        headerPadding: '150px',
+        colorPrimaryHover: '#225e04',
+        controlOutlineWidth: 0.5,
+        colorBgContainer: 'white'
     },
 
     components: {
-        Input: {
-            hoverBorderColor: 'rgb(82, 196, 26)',
-            activeBorderColor: 'rgb(82, 196, 26)',
-            colorError: 'rgb(82, 196, 26)',
-            colorErrorBorderHover: 'rgb(72, 182, 19)'
-        },
-
-        InputNumber: {
-            // controlWidth: 312,
-            algorithm: false,
-            colorPrimaryHover: 'red',
-            hoverBorderColor: 'rgb(82, 196, 26)',
-            activeBorderColor: 'rgb(82, 196, 26)',
-            handleHoverColor: 'rgb(82, 196, 26)',
-            colorError: 'rgb(82, 196, 26)',
-            colorErrorBorderHover: 'rgb(72, 182, 19)'
-        },
-
         Menu: {
             groupTitleColor: 'rgba(245, 237, 237, 0.45)',
             dangerItemActiveBg: 'rgb(70, 187, 13)',
@@ -76,6 +58,37 @@ const themeJson = {
             borderColor: '#b3bab0',
             rowSelectedBg: '#748A3D',
             rowSelectedHoverBg: '#748A3D'
+        },
+        Tabs: {
+            colorPrimaryActive: 'white',
+            cardBg: '#3B3B47',
+            itemColor: 'white',
+            itemActiveColor: 'white',
+            titleFontSize: '15px'
+        },
+
+        Input: {
+            algorithm: false,
+            hoverBorderColor: '#366503',
+            activeBorderColor: '#366503',
+            handleHoverColor: '#366503',
+            colorError: '#366503',
+            colorErrorBorderHover: '#366503'
+        },
+
+        InputNumber: {
+            algorithm: false,
+            hoverBorderColor: '#366503',
+            activeBorderColor: '#366503',
+            handleHoverColor: '#366503',
+            colorError: '#366503',
+            colorErrorBorderHover: '#366503'
+        },
+        Card: {
+            actionsBg: 'red',
+            headerFontSize: 12,
+            headerFontSizeSM: 12,
+            headerBg: 'white'
         }
     }
 };

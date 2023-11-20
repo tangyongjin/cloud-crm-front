@@ -2,6 +2,8 @@ import { observable, action, autorun } from 'mobx';
 import CellRender from '@/routes/NanxTable/NanxTableCom/cellRender';
 import getTextWidth from '@/routes/NanxTable/NanxTableCom/commonTableTextTool';
 import listDataParams from '@/routes/NanxTable/NanxTableCom/listDataParams';
+import { randomString } from '@/utils/tools';
+
 import api from '@/api/api';
 import { toJS } from 'mobx';
 
@@ -9,6 +11,7 @@ class _NanxTableStore {
     constructor() {
         autorun(() => {
             if (this.SERIALNO == null) {
+                this.SERIALNO = randomString(10);
             }
         });
     }
@@ -67,6 +70,10 @@ class _NanxTableStore {
         this.curd = {};
         this.tableColumnConfig = [];
         this.search_query_cfg = [];
+    };
+
+    @action clearSelectedRows = () => {
+        this.selectedRowKeys = [];
     };
 
     @action setDataGridCode = (DataGridCode) => (this.datagrid_code = DataGridCode);

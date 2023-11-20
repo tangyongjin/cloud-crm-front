@@ -1,52 +1,64 @@
 import React from 'react';
-import { DatePicker } from 'antd';
-// import moment from 'moment';
-// import locale from 'antd/es/date-picker/locale/zh_CN';
-
 import dayjs from 'dayjs';
+import { DatePicker as AntDatePicker } from 'antd';
+import { compose, mapStyledProps, mapTextComponent } from './uformHelpers/UFormUtils';
+import { registerFormField, connect } from '@uform/react';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import locale from 'antd/es/date-picker/locale/zh_CN';
-
 import 'dayjs/locale/zh-cn';
 
+dayjs.locale('zh-cn'); // 全局使用简体中文
 dayjs.extend(customParseFormat);
-const dateFormat = 'YYYY-MM-DD';
+const dateFormat1 = 'YYYY-MM-DD';
+const dateFormat2 = 'YYYY-MM-DD HH:mm:ss';
+console.log('mapTextComponent: ', mapTextComponent);
 
-export default class DateEditor extends React.Component {
-    constructor(props) {
-        super(props);
-        console.log('DateEditor💘💘', props);
-        this.state = {
-            datevalue: props.d_value ? props.d_value : null
-        };
-    }
+const WrapperAntDateComomnet = (TarGet) => {
+    return class Select extends React.Component {
+        render() {
+            return <TarGet placeholder={'请输入日期'} locale={locale} format={dateFormat1} {...this.props} />;
+        }
+    };
+};
 
-    componentDidMount() {
-        this.setState(
-            {
-                datevalue: this.props.d_value
-            },
-            () => {
-                this.props.onChange(this.state.datevalue);
-            }
-        );
-    }
+const WrapperAntDateTimeComomnet = (TarGet) => {
+    return class Select extends React.Component {
+        render() {
+            return <TarGet showTime placeholder={'请输入时间'} locale={locale} format={dateFormat2} {...this.props} />;
+        }
+    };
+};
 
-    render() {
-        return (
-            <div>
-                <DatePicker
-                    onChange={(e, ds) => {
-                        this.props.onChange(ds);
-                    }}
-                    defaultValue={this.state.datevalue ? dayjs(this.state.datevalue, dateFormat) : null}
-                    // defaultValue= { null }
-                    // value={dayjs(this.state.datevalue, dateFormat)}
+const mapMomentDateValue = (props) => {
+    props.value = props.value ? dayjs(props.value, dateFormat1) : null;
+    return props;
+};
 
-                    locale={locale}
-                    format={dateFormat}
-                />
-            </div>
-        );
-    }
-}
+const mapMomentDateTimeValue = (props) => {
+    props.value = props.value ? dayjs(props.value, dateFormat2) : null;
+    return props;
+};
+
+const DatePicker = WrapperAntDateComomnet(AntDatePicker);
+const DateTimePicker = WrapperAntDateTimeComomnet(AntDatePicker);
+
+const UDateEditor = connect({
+    getValueFromEvent(event, _value) {
+        return _value;
+    },
+    getProps: compose(mapStyledProps, mapMomentDateValue),
+    getComponent: mapTextComponent
+})(DatePicker);
+
+const UDateTimeEditor = connect({
+    getValueFromEvent(event, _value) {
+        return _value;
+    },
+    getProps: compose(mapStyledProps, mapMomentDateTimeValue),
+    getComponent: mapTextComponent
+})(DateTimePicker);
+
+registerFormField('UDateEditor', UDateEditor);
+registerFormField('UDateTimeEditor', UDateTimeEditor);
+
+export { UDateEditor, UDateTimeEditor };
