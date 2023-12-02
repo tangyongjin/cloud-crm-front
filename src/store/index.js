@@ -1,15 +1,17 @@
 import NanxTableStore from './NanxTableStore';
-import DataGridStore from './DataGridStore';
+import GridConfigStore from './GridConfigStore';
 import MenuStore from './MenuStore';
 import UserStore from './UserStore';
 import TriggerStore from './TriggerStore';
 import TableAsEditorStore from './TableAsEditorStore';
+import MenuItemStore from './MenuItemStore';
 
 const RootStore = {
     UserStore,
     NanxTableStore,
     MenuStore,
-    DataGridStore,
+    MenuItemStore,
+    GridConfigStore,
     TableAsEditorStore,
     TriggerStore
 };

@@ -7,11 +7,11 @@ import ColRenderCfg from './FileldCfgCompoments/ColRenderCfg';
 import TableVisibleCfg from './FileldCfgCompoments/TableVisibleCfg';
 import FormVisbleCfg from './FileldCfgCompoments/FormVisbleCfg';
 import CategeroyCfg from './FileldCfgCompoments/CategeroyCfg';
-import InitValeCfg from './FileldCfgCompoments/InitValeCfg';
+import InitValueCfg from './FileldCfgCompoments/InitValueCfg';
 import ReadOnlyCfg from './FileldCfgCompoments/ReadOnlyCfg';
 import ValidateRuleCfg from './FileldCfgCompoments/ValidateRuleCfg';
 
-@inject('DataGridStore')
+@inject('GridConfigStore')
 @observer
 class FieldPropertyRender extends React.Component {
     render() {
@@ -29,15 +29,15 @@ class FieldPropertyRender extends React.Component {
                     <FormVisbleCfg col={this.props.col} />
                     <ReadOnlyCfg col={this.props.col} />
                     <CategeroyCfg col={this.props.col} />
-                    <InitValeCfg col={this.props.col} />
+                    <InitValueCfg col={this.props.col} />
                     <ValidateRuleCfg col={this.props.col} />
                 </div>
                 <div style={{ marginLeft: '390px', marginTop: '46px' }}>
                     <Button
-                        className="round-button"
+                        disabled={this.props.col.Field == 'id'}
                         type="primary"
                         size="small"
-                        onClick={() => this.props.DataGridStore.saveCfg(this.props.col.Field)}>
+                        onClick={() => this.props.GridConfigStore.saveCfg(this.props.col.Field)}>
                         保存字段配置
                     </Button>
                 </div>

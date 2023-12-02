@@ -1,5 +1,13 @@
+import moment from 'moment';
+
 export function isEmpty(value) {
     return typeof value === 'undefined' || value === null;
+}
+
+export function nowString() {
+    const now = moment();
+    const timeString = now.format('HH:mm:ss');
+    return timeString;
 }
 
 export function randomString(string_length) {
@@ -13,10 +21,6 @@ export function randomString(string_length) {
     return randomstring;
 }
 
-export function color() {}
-
-export function shape() {}
-
 export function getTargetMenuKey(url) {
     let hashLocation = url.indexOf('?_k=');
     let end_string = url.slice(hashLocation + 4);
@@ -27,6 +31,24 @@ export function getTargetMenuKey(url) {
     } else {
         return null;
     }
+}
+
+export function findItemByKey(menuArray, key) {
+    for (const item of menuArray) {
+        if (item.key === key) {
+            return item; // 返回找到的项
+        }
+
+        // 如果有子项，递归查找
+        if (item.children && item.children.length > 0) {
+            const foundInChildren = findItemByKey(item.children, key);
+            if (foundInChildren) {
+                return foundInChildren; // 返回找到的子项
+            }
+        }
+    }
+    // 如果未找到匹配项，返回 null 或适当的值
+    return null;
 }
 
 export function getAllKeys(menuData) {
@@ -55,33 +77,6 @@ export function getAllKeys(menuData) {
     return keys;
 }
 
-export function findMenuPath(menu, key) {
-    const findPath = (menu, key, path) => {
-        for (let i = 0; i < menu.length; i++) {
-            const item = menu[i];
-            path.push(item);
-            if (item.key === key) {
-                return path;
-            }
-            if (item.children) {
-                const foundPath = findPath(item.children, key, path);
-                if (foundPath) {
-                    return foundPath;
-                }
-            }
-            path.pop();
-        }
-    };
-
-    const path = [];
-    const result = findPath(menu, key, path);
-    if (typeof result === 'undefined') {
-        return [];
-    } else {
-        return result;
-    }
-}
-
 export function tryParseJSON(str) {
     if (isEmpty(str)) {
         return null;
@@ -99,7 +94,47 @@ export function tryParseJSON(str) {
         const parsedJSON = JSON.parse(str);
         return parsedJSON;
     } catch (error) {
-        console.error('Error parsing JSON:', error);
+        console.log('Error parsing JSON:', error);
         return null; // or handle the error in some way
     }
+}
+
+export function getBase64(img, callback) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+}
+
+export function findMenuPath(RoleBasedMenuList, currentMenukey) {
+    const findPath = (menu, key, path) => {
+        for (let i = 0; i < menu.length; i++) {
+            const item = menu[i];
+            path.push(item);
+            if (item.key === key) {
+                return path;
+            }
+            if (item.children) {
+                const foundPath = findPath(item.children, key, path);
+                if (foundPath) {
+                    return foundPath;
+                }
+            }
+            path.pop();
+        }
+    };
+
+    let path = [];
+
+    const result = findPath(RoleBasedMenuList, currentMenukey, path);
+    console.log('setting router>>>', result);
+    if (typeof result === 'undefined') {
+        return [];
+    } else {
+        return result;
+    }
+}
+
+// 登录后的第一个路由.暂时定位第一个原素
+export function getDefaultMenuItem(menus) {
+    return menus[0];
 }

@@ -1,52 +1,43 @@
 import React from 'react';
-import { Modal, message, Button } from 'antd';
+import { message, Button } from 'antd';
 import { observer, inject } from 'mobx-react';
 import GridFieldManager from './GridFieldManager';
 import { toJS } from 'mobx';
-import { SlidersOutlined } from '@ant-design/icons';
+import CommonModal from '@/routes/NanxTable/NanxTableCom/commonModal';
+import IconWrapper from '@/utils/IconWrapper';
 
-@inject('DataGridStore')
+@inject('GridConfigStore')
 @observer
 export default class GridFieldMnt extends React.Component {
     constructor(props) {
+        console.log('props: ', props);
         super(props);
-        this.state = {
-            open: false
-        };
         this.init = this.init.bind(this);
+        this.state = { iconStr: null };
     }
 
-    async init() {
+    async init(buttonSource) {
+        this.setState({ iconStr: buttonSource.icon });
+        console.log('item: ', buttonSource);
         let { selectedRows } = this.props.NanxTableStore;
         if (selectedRows.length == 0) {
             message.info('必须选择一个DataGrid');
             return;
         } else {
             let record = selectedRows[0];
-            console.log(record);
-            this.props.DataGridStore.setCurrentActcode(toJS(record).datagrid_code);
-            this.props.DataGridStore.setCurrentDatagridTitle(toJS(record).datagrid_title);
-            this.props.DataGridStore.setCurrentBasetable(toJS(record).base_table);
-            this.props.DataGridStore.prepareDataGirdEnv();
-            this.setState({ open: true });
+            this.props.NanxTableStore.showButtonModal();
+            this.props.GridConfigStore.setCurrentDataGridCode(toJS(record).datagrid_code);
+            this.props.GridConfigStore.setCurrentDatagridTitle(toJS(record).datagrid_title);
+            this.props.GridConfigStore.setCurrentBasetable(toJS(record).base_table);
+            this.props.GridConfigStore.initAll();
+            this.props.GridConfigStore.prepareDataGirdEnv();
         }
     }
 
-    onCancel = () => {
-        this.setState({
-            open: false
-        });
-    };
-
     render() {
-        console.log(this.props.DataGridStore);
-
         let { selectedRows } = this.props.NanxTableStore;
         return selectedRows.length > 0 ? (
-            <Modal
-                open={this.state.open}
-                destroyOnClose={true}
-                onCancel={() => this.onCancel()}
+            <CommonModal
                 width={'1100px'}
                 footer={[
                     <Button key="gidmnt" type="primary" onClick={this.onCancel}>
@@ -55,12 +46,12 @@ export default class GridFieldMnt extends React.Component {
                 ]}
                 title={
                     <div>
-                        <SlidersOutlined />
+                        {IconWrapper(this.state.iconStr)}
                         字段管理
                     </div>
                 }>
-                {this.props.DataGridStore.ColsDbInfo.length == 0 ? null : <GridFieldManager />}
-            </Modal>
+                <GridFieldManager />
+            </CommonModal>
         ) : null;
     }
 }

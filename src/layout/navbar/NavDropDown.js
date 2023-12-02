@@ -1,24 +1,21 @@
 import { Dropdown, Modal } from 'antd';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import React from 'react';
 import { hashHistory } from 'react-router';
 import LoginService from '@/routes/login/LoginService';
 import { port, root_url } from '@/api/api_config/base_config';
-
 const avatarRoot = `${root_url}:${port}/`;
 const { confirm } = Modal;
 
-@inject('MenuStore')
 @observer
 export default class NavDropDown extends React.Component {
     constructor(props) {
         super(props);
-        this.MenuStore = props.MenuStore;
         this.LoginService = new LoginService();
     }
 
     logout = () => {
-        this.MenuStore.setBossTitle(null);
+        // this.MenuStore.setBossTitle(null);
         this.LoginService.logout();
     };
 
@@ -27,20 +24,25 @@ export default class NavDropDown extends React.Component {
             content: <h4>您确定要退出系统么？</h4>,
             onOk: () => this.logout(),
             cancelText: '取消',
-            icon: (
-                <div>
-                    <a-icon type="exclamation-circle" />
-                </div>
-            ),
             okText: '确定',
-            okButtonProps: { style: { backgroundColor: '#343c41', color: '#fff', borderColor: '#343c41' } },
-            cancelButtonProps: { style: { color: '#174a02', borderColor: '#343c41' } }
+
+            okButtonProps: {
+                type: 'primary',
+                style: { backgroundColor: '#343c41', color: '#fff', borderColor: '#343c41' }
+            },
+            cancelButtonProps: {
+                danger: true
+            }
         });
     }
 
     render() {
         const onClick = ({ key }) => {
             if (key == 1) {
+                if (window.location.href.includes('/profile')) {
+                    console.log('点击 /profile 相同菜单');
+                    return;
+                }
                 hashHistory.push('/profile');
             }
             if (key == 2) {
@@ -71,7 +73,7 @@ export default class NavDropDown extends React.Component {
                         onClick
                     }}>
                     <div>
-                        <span style={{ paddingRight: '5px', color: '#97a8be', fontSize: '14px' }}>
+                        <span className="nanx-role">
                             {sessionStorage.getItem('staff_name') + ' / ' + sessionStorage.getItem('role_name')}
                         </span>
                         <img
@@ -79,7 +81,7 @@ export default class NavDropDown extends React.Component {
                             style={{
                                 width: '36px',
                                 borderRadius: '5px',
-                                height: '36px',
+                                maxHeight: '36px',
                                 verticalAlign: 'middle'
                             }}
                             src={avatarRoot + JSON.parse(sessionStorage.getItem('userInfo')).head_portrait}

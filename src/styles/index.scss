@@ -1,34 +1,18 @@
 @import 'antd/dist/reset.css';
+@import 'modal-title.scss';
 
 body {
     font-family: Arial, 'Microsoft YaHei', '微软雅黑' !important;
 }
 
-.ant-modal-title {
-    color: white !important;
-    padding: 12px 0 0 12px !important;
+.ant-layout-sider {
+    background: rgb(13, 73, 74);
 }
 
-.ant-modal-close-icon {
-    color: white;
-    margin: -10px -20px 0 0 !important;
-}
-
-div.ant-modal-title>div>span {
-    margin-right: 10px !important;
-}
-
-.ant-modal-header {
-    color: #fff !important;
-    background: hwb(126 9% 79%) !important;
-    height: 42px !important;
-    border-radius: 2px 2px 0 0;
-    margin: -20px -24px 0 -24px !important;
-    box-sizing: border-box;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-    /* 添加阴影效果 */
-    border-bottom: 0.5px solid #0f2512;
-    /* 添加底部边框 */
+.nanx-role {
+    padding-right: 5px;
+    color: #054807;
+    font-size: 14px;
 }
 
 .table_wrapper {
@@ -63,7 +47,14 @@ div.ant-modal-title>div>span {
 
 .ant-btn-dangerous {
     color: #2e940d !important;
+    background-color: rgb(18, 2, 2);
     border-color: #3b3b47 !important;
+}
+
+.ant-btn-default:hover {
+    color: #023c26 !important;
+    background-color: rgb(18, 2, 2);
+    border-color: #0d9450 !important;
 }
 
 /*滚动条样式*/
@@ -115,16 +106,15 @@ div.ant-modal-title>div>span {
 .help-tip {
     color: white;
     margin-left: 4px;
-    border-radius: 1px;
+    border-radius: 4px;
     border: #fff;
 }
 
-
-.ant-tree-checkbox-disabled>span {
+.ant-tree-checkbox-disabled > span {
     border-color: rgb(5, 82, 9) !important;
 }
 
-.ant-tree-checkbox-disabled>span::after {
+.ant-tree-checkbox-disabled > span::after {
     border-color: rgb(5, 82, 9) !important;
 }
 
@@ -176,71 +166,51 @@ span.anticon.anticon-exclamation-circle {
     flex-wrap: wrap;
 }
 
-
-
-// .fromBox {
-//     width: 50%;
-//     flex: 1 1 100%; /* 每个 fromBox 占据整行 */
-//     display: flex;
-//     justify-content: flex-start; // 靠左对齐
-//     border: 1px solid #225e04;
-//     flex-wrap: wrap; // 换行
-//     flex-direction: row; /* 默认是 row，这一行可以省略 */
-
-// }
-
 .fromBox {
-    flex: 1 1 35%; /* 每个 fromBox 占据整行 */
+    flex: 1 1 35%;
+    /* 每个 fromBox 占据整行 */
     box-sizing: border-box;
-    display: flex; /* 让 formItem 在同一行内显示 */
+    display: flex;
+    /* 让 formItem 在同一行内显示 */
 }
 
 .formItem {
     display: flex;
     align-items: center;
-    /* Align items vertically in the center */
     height: 44px;
-    justify-content: flex-start; // 靠左对齐
-    flex-direction: row; /* 默认是 row，这一行可以省略 */
-    // width: calc((100% - 20px) / 1); // 这个是公式，减去边距以后一行放多少个。
-}
-
-.formItem:first-child {
-    flex: 0 0 135px; /* 第一个 formItem 固定宽度 */
 }
 
 .formItemBig {
     display: flex;
     align-items: center;
-    /* Align items vertically in the center */
     height: 44px;
-    width: 680px
 }
 
 .formItem svg {
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    height: 44px;
 }
- 
+
+.formItem:first-child {
+    flex: 0 0 135px;
+    /* 第一个 formItem 固定宽度 */
+}
+
+.longInput {
+    width: 696px !important;
+}
+
 div.longSelect {
     width: 668px !important;
 }
-
-
 
 .ant-tabs-tab-active {
     background: rgb(1, 63, 24) !important;
 }
 
-.ant-tabs-tab-active>div {
+.ant-tabs-tab-active > div {
     color: #d3e1d6 !important;
-}
-
-/** hero icons */
-
-.w-5 {
-    height: 20px;
-    width: 20px;
-    margin-right: 4px;
 }
 
 /* uform css hack */
@@ -300,3 +270,117 @@ div.longSelect {
 .ant-select-selector:active {
     border-color: #225e04 !important;
 }
+
+.plugBox {
+    box-sizing: border-box;
+    display: flex;
+    word-wrap: break-word !important;
+    white-space: normal;
+}
+
+.bottom_border {
+    border-bottom: 1px solid rgb(168, 166, 166);
+}
+
+.plugItem:nth-child(1) {
+    flex: 0 0 30%;
+    /* flex-grow: 0, flex-shrink: 0, flex-basis: 30% */
+}
+
+.plugItem:nth-child(2) {
+    flex: 0 0 70%;
+    /* flex-grow: 0, flex-shrink: 0, flex-basis: 70% */
+}
+
+.plugItem {
+    font-size: 15px;
+    display: flex;
+    align-items: left;
+    justify-content: flex-start; // 靠左对齐
+}
+
+.plugMemo {
+    width: 260px !important;
+    color: rgb(9, 3, 3) !important;
+    overflow-wrap: break-word !important;
+    font-size: 13px;
+    padding-bottom: 6px;
+    padding-top: 5px;
+    margin-bottom: 6px;
+}
+
+// commonModal 标题的 icon
+div.modeal-drag-title > div > svg {
+    vertical-align: -3px;
+    margin-right: 4px;
+}
+
+.pointerHand {
+    cursor: pointer;
+}
+
+.table-button {
+    color: rgb(207, 201, 201) !important;
+    background-color: rgb(19, 3, 3) !important;
+}
+
+// 按钮里面的icon
+.ant-btn-icon {
+    width: 14px;
+    height: 14px;
+    vertical-align: -2px;
+    color: rgb(207, 201, 201) !important;
+    margin-right: 0px;
+    fill: rgb(207, 201, 201) !important;
+    overflow: hidden;
+}
+
+// 菜单的  icon
+span.ant-menu-title-content > span > svg {
+    vertical-align: -2px;
+    margin-right: 6px;
+}
+
+span.ant-menu-title-content > span > svg {
+    vertical-align: -2px;
+    margin-right: 6px;
+}
+
+// 按钮 hover
+.ant-btn:hover .ant-btn-icon svg,
+.ant-btn:hover span {
+    /* 在悬停时的样式设置，例如修改颜色、背景等 */
+    color: white;
+    /* 修改为你想要的颜色 */
+    /* 修改为你想要的背景颜色 */
+}
+
+div.formItem svg {
+    height: 20px !important;
+    height: 20px !important;
+}
+
+.office-docu-title {
+    display: flex;
+    align-items: center;
+}
+
+// 表格选中后的背景颜色
+.ant-table-row-selected > td {
+    color: white !important;
+    background: rgb(6, 48, 8) !important;
+}
+
+.ant-table-row-selected > td > a {
+    color: white !important;
+    background: rgb(6, 48, 8) !important;
+}
+
+
+.truncate {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 140px; /* 设置最大宽度，超过的部分将显示省略号 */
+  }

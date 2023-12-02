@@ -7,14 +7,9 @@ export default class Blank extends React.Component {
         this.state = {};
     }
     componentDidMount() {
-        console.log(7658, this.props);
-
         hashHistory.push({
             pathname: this.props.location.state.router,
-            state: {
-                datagrid_code: this.props.location.state.datagrid_code,
-                menu_code: this.props.location.state.menu
-            }
+            state: {}
         });
     }
     render() {

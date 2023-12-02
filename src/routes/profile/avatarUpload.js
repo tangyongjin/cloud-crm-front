@@ -1,89 +1,54 @@
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { message, Upload } from 'antd';
-import React, { useState } from 'react';
+import { Form } from 'antd';
+import React from 'react';
+import FileUploder from '@/component/fileUploder';
 import api from '@/api/api';
+import { useState } from 'react';
+import { port, root_url } from '@/api/api_config/base_config';
+const fileRoot = `${root_url}:${port}/`;
 
-const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-};
-const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('只能上出JPG/PNG格式文件');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-};
 const AvatarUpload = () => {
-    const [loading, setLoading] = useState(false);
-    const [imageUrl, setImageUrl] = useState();
-    const handleChange = (info) => {
-        console.log(info);
+    const [imageUrl, setimageUrl] = useState(null);
 
-        if (info.file.status === 'uploading') {
-            setLoading(true);
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, (url) => {
-                setLoading(false);
-                setImageUrl(url);
-            });
-        }
-    };
-    const uploadButton = (
-        <div>
-            {loading ? <LoadingOutlined /> : <PlusOutlined />}
-            <div
-                style={{
-                    marginTop: 8
-                }}>
-                Upload
-            </div>
-        </div>
-    );
-    return (
-        <div
-            style={{
-                marginLeft: '305px',
-                height: '246px',
-                width: '246px',
-                maxHeight: '246px',
-                minHeight: '246px'
-            }}>
-            <Upload
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                action={api.file.uploadAvatar}
-                beforeUpload={beforeUpload}
-                headers={{
-                    Authorization: sessionStorage.getItem('token')
-                }}
-                onChange={handleChange}>
-                {imageUrl ? (
+    const ImgRender = (props) => {
+        return (
+            <div style={{ marginTop: 10 }}>
+                {props.imageUrl ? (
                     <img
-                        src={imageUrl}
+                        src={props.imageUrl}
                         alt="avatar"
                         style={{
-                            marginTop: '132px',
-                            width: '200px',
-                            maxHeight: '246px',
-                            minHeight: '246px'
+                            width: '100px',
+                            height: 'auto',
+                            maxHeight: '246px'
                         }}
                     />
-                ) : (
-                    uploadButton
-                )}
-            </Upload>
+                ) : null}
+            </div>
+        );
+    };
+
+    const uploadCallbackRender = (uploadResultData) => {
+        console.log('uploadResultData: ', uploadResultData);
+        let tarGetValue = uploadResultData[0]['url'];
+        setimageUrl(fileRoot + tarGetValue);
+    };
+
+    return (
+        <div>
+            <Form labelCol={{ span: 5 }} wrapperCol={{ span: 4 }}>
+                <Form.Item label="上传头像">
+                    <FileUploder
+                        buttonWidth="70px"
+                        callbackRender={uploadCallbackRender}
+                        fileType="img"
+                        showProgress={true}
+                        apiEndpoint={api.file.uploadAvatar}
+                    />
+                    {imageUrl ? <ImgRender imageUrl={imageUrl} /> : null}
+                </Form.Item>
+            </Form>
         </div>
     );
 };
+
 export default AvatarUpload;

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Input, message, Popconfirm, Button, Select, Table, Modal } from 'antd';
+import { Input, message, Popconfirm, Button, Select, Table } from 'antd';
 import api from '@/api/api';
 import cloneDeep from 'lodash/cloneDeep';
-import IconRender from '@/routes/NanxTable/NanxTableCom/cellRenders/IconRender';
+import IconWrapper from '@/utils/IconWrapper';
+import CommonModal from '@/routes/NanxTable/NanxTableCom/commonModal';
 
-import { BorderOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
 export default class GridButtonAdder extends React.Component {
@@ -16,33 +16,29 @@ export default class GridButtonAdder extends React.Component {
             allButtons: [],
             gridButtons: [],
             gridButtonOrders: [],
-            open: false,
-            btncode: null
+            btncode: null,
+            iconStr: null
         };
     }
 
     //eslint-disable-next-line
-    async init() {
+    async init(buttonSource) {
+        this.setState({ iconStr: buttonSource.icon });
         if (this.props.NanxTableStore.selectedRows.length <= 0) {
             message.error('请选择一条数据');
             return;
         }
 
         let currentrow = this.props.NanxTableStore.selectedRows[0];
-        console.log(currentrow);
         let params = {};
         let res = await api.button.getAllButtons(params);
         this.setState({
-            open: true,
             record: currentrow,
             allButtons: res.data
         });
 
         this.getDataGridButtons();
-    }
-
-    onChange(a) {
-        this.setState({ btncode: a });
+        this.props.NanxTableStore.showButtonModal();
     }
 
     getDataGridButtons = async () => {
@@ -77,9 +73,6 @@ export default class GridButtonAdder extends React.Component {
     };
 
     getOptionButtons(record, rowIndex) {
-        console.log('record: ', record);
-        console.log('rowIndex: ', rowIndex);
-
         return (
             <div className="options">
                 <Popconfirm
@@ -140,7 +133,7 @@ export default class GridButtonAdder extends React.Component {
             dataIndex: 'icon',
 
             render: (text) => {
-                return IconRender(text);
+                return IconWrapper(text);
             }
         },
         {
@@ -165,10 +158,10 @@ export default class GridButtonAdder extends React.Component {
         return (
             <div>
                 {this.state.record ? (
-                    <Modal
+                    <CommonModal
                         title={
                             <div>
-                                <BorderOutlined />
+                                {IconWrapper(this.state.iconStr)}
                                 分配按钮
                             </div>
                         }
@@ -215,7 +208,7 @@ export default class GridButtonAdder extends React.Component {
                                                     <span style={{ width: '150px' }}>{item.button_code}</span>
                                                     <span style={{ marginLeft: '30px' }}>
                                                         <span>
-                                                            {IconRender(item.icon)} {item.name}
+                                                            {IconWrapper(item.icon)} {item.name}
                                                         </span>
                                                     </span>
                                                 </div>
@@ -227,7 +220,7 @@ export default class GridButtonAdder extends React.Component {
                                 </Button>
                             </div>
                         )}
-                    </Modal>
+                    </CommonModal>
                 ) : null}
             </div>
         );

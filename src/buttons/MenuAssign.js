@@ -1,6 +1,8 @@
 import React from 'react';
-import { message, Modal, Button } from 'antd';
+import { message, Button } from 'antd';
 import AllocationMenu from './MenuAssign/allocationMenu';
+import CommonModal from '@/routes/NanxTable/NanxTableCom/commonModal';
+import IconWrapper from '@/utils/IconWrapper';
 
 export default class MenuAssign extends React.Component {
     constructor(props) {
@@ -8,46 +10,37 @@ export default class MenuAssign extends React.Component {
         this.NanxTableStore = props.NanxTableStore;
         this.state = {
             record: null,
-            open: false
+            iconStr: null
         };
     }
 
     // eslint-disable-next-line
-    async init() {
+    async init(buttonSource) {
+        this.setState({ iconStr: buttonSource.icon });
         if (this.props.NanxTableStore.selectedRows.length <= 0) {
             message.error('请选择一个角色');
             return;
         }
 
         let currentrow = this.props.NanxTableStore.selectedRows[0];
-        console.log(currentrow);
-        this.setState({
-            open: true,
-            record: currentrow
-        });
+
+        this.props.NanxTableStore.showButtonModal();
+        this.setState({ record: currentrow });
     }
-
-    handleOk = async () => {};
-
-    handleCancel = () => {
-        this.setState({
-            open: false
-        });
-    };
 
     render() {
         return (
             <div>
                 {this.state.record ? (
-                    <Modal
-                        title="分配菜单"
-                        onOk={this.handleOk}
-                        onCancel={this.handleCancel}
-                        okText="确认"
-                        cancelText="取消"
+                    <CommonModal
+                        title={
+                            <div>
+                                {IconWrapper(this.state.iconStr)}
+                                分配菜单
+                            </div>
+                        }
                         width="1200px"
                         height="500px"
-                        open={this.state.open}
                         destroyOnClose={true}
                         footer={[
                             <Button key="submit" type="primary" onClick={this.handleCancel}>
@@ -55,7 +48,7 @@ export default class MenuAssign extends React.Component {
                             </Button>
                         ]}>
                         <AllocationMenu roleCode={this.state.record.role_code} />
-                    </Modal>
+                    </CommonModal>
                 ) : null}
             </div>
         );

@@ -1,15 +1,21 @@
-import CommonTableForm from '@/routes/NanxTable/NanxTableCom/commonTableForm';
+import TableSchemaForm from '@/routes/NanxTable/NanxTableCom/TableForm';
 import CommonModal from '@/routes/NanxTable/NanxTableCom/commonModal';
 import React from 'react';
 import { message } from 'antd';
 import api from '@/api/api';
-import { EditOutlined } from '@ant-design/icons';
-
 import { observer, inject } from 'mobx-react';
+import IconWrapper from '@/utils/IconWrapper';
+
 @inject('NanxTableStore')
 @observer
 export default class TableEditCom extends React.Component {
-    init = async () => {
+    constructor(props) {
+        super(props);
+        this.state = { iconStr: null };
+    }
+
+    init = async (buttonSource) => {
+        this.setState({ iconStr: buttonSource.icon });
         await this.props.NanxTableStore.setTableAction('edit');
         if (this.props.NanxTableStore.selectedRows.length != 1) {
             message.error('请选择1条数据.');
@@ -62,12 +68,11 @@ export default class TableEditCom extends React.Component {
                 width={_width}
                 title={
                     <div>
-                        <EditOutlined />
+                        {IconWrapper(this.state.iconStr)}
                         编辑
                     </div>
                 }>
-                <CommonTableForm
-                    onChange={this.props.onChange}
+                <TableSchemaForm
                     NanxTableStore={this.props.NanxTableStore}
                     saveFormData={this.saveFormData.bind(this)}
                 />

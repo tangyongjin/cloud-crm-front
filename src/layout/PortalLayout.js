@@ -3,21 +3,26 @@ import LeftMenu from './leftMenu/leftMenu';
 import Navbar from './navbar//Navbar';
 import { Layout } from 'antd';
 import { inject, observer } from 'mobx-react';
-import { getTargetMenuKey } from '@/utils/tools';
-import { findMenuPath } from '@/utils/tools';
+import { getTargetMenuKey, findItemByKey } from '@/utils/tools';
 
 const { Header, Sider, Content } = Layout;
 
 const PortalLayout = inject('MenuStore')(
     observer((props) => {
+        window.onload = () => {
+            console.log('浏览器刷新');
+            let storeageMenu = props.MenuStore.getCurrentMenuKeyFromSessionStorage();
+            props.MenuStore.setCurrentMenu(storeageMenu, '浏览器刷新');
+        };
+
         useEffect(() => {
             const onPrev = () => {
                 let goHref = window.location.href;
                 let targetMenuKey = getTargetMenuKey(goHref);
-                let path = findMenuPath(props.MenuStore.RoleBasedMenuList, targetMenuKey);
-                if (path.length > 0) {
-                    props.MenuStore.setCurrentMenu(path[path.length - 1]);
-                    props.MenuStore.refreshBreadcrumbs();
+                let targetMenu = findItemByKey(props.MenuStore.RoleMenuArray, targetMenuKey);
+                // 点击profile 会找不到 targetMenu
+                if (targetMenu) {
+                    props.MenuStore.setCurrentMenu(targetMenu, 'onPrev');
                 }
             };
 
@@ -35,9 +40,7 @@ const PortalLayout = inject('MenuStore')(
             <Layout style={{ minHeight: '100vh', minWidth: '100vh' }}>
                 <Sider collapsed={props.MenuStore.isCollapse}>
                     <LeftMenu
-                        collapsed={props.MenuStore.isCollapse}
                         className="portal_menu"
-                        menuList={props.MenuStore.RoleBasedMenuList}
                         style={{ padding: 0, height: '100vh', overflowY: 'scroll' }}
                         width={300}
                     />

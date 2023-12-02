@@ -100,14 +100,11 @@ class _NanxTableStore {
 
     @action TableOnChange = async (pagination) => {
         if (pagination.pageSize == this.pageSize) {
-            console.log('没有改变 pageSize');
-            console.log(pagination.current);
             await this.setCurrentPage(pagination.current);
             await this.listData('setCurrentPage');
 
             // 没有改变 pageSize
         } else {
-            console.log('改变 pageSize !!! ');
             await this.setCurrentPage(1);
             await this.setPageSize(pagination.pageSize);
             await this.listData('onShowSizeChange');
@@ -161,10 +158,9 @@ class _NanxTableStore {
 
     @action getTableColumns = () => {};
     @action setTableColumns = (cols) => (this.tableColumns = cols);
-
     @action hasTableEditor() {
         for (let key in this.formCfg.properties) {
-            if (this.formCfg.properties[key].type === 'TableEditor') {
+            if (this.formCfg.properties[key].type === 'UTableEditor') {
                 return true;
             }
         }

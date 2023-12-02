@@ -1,8 +1,7 @@
 import UrlProtect from '@/routes/urlProtect';
 export default {
-    onEnter: UrlProtect, // add this
+    onEnter: UrlProtect,
     path: 'table',
-    component: require('@/layout/PortalLayout').default,
     childRoutes: [
         {
             path: 'commonXTable',

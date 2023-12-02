@@ -1,14 +1,20 @@
-import CommonTableForm from '@/routes/NanxTable/NanxTableCom/commonTableForm';
+import TableSchemaForm from '@/routes/NanxTable/NanxTableCom/TableForm';
 import CommonModal from '@/routes/NanxTable/NanxTableCom/commonModal';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import api from '@/api/api';
-import { FileAddOutlined } from '@ant-design/icons';
+import IconWrapper from '@/utils/IconWrapper';
 
 @inject('NanxTableStore') //
 @observer
 export default class TableAddCom extends React.Component {
-    init = async () => {
+    constructor(props) {
+        super(props);
+        this.state = { iconStr: null };
+    }
+
+    init = async (buttonSource) => {
+        this.setState({ iconStr: buttonSource.icon });
         await this.props.NanxTableStore.setTableAction('add');
         await this.props.NanxTableStore.clearSelectedRows();
         await this.props.NanxTableStore.rowSelectChange([], []);
@@ -43,12 +49,11 @@ export default class TableAddCom extends React.Component {
                 width={_width}
                 title={
                     <div>
-                        <FileAddOutlined />
+                        {IconWrapper(this.state.iconStr)}
                         添加数据
                     </div>
                 }>
-                <CommonTableForm
-                    onChange={this.props.onChange}
+                <TableSchemaForm
                     NanxTableStore={this.props.NanxTableStore}
                     saveFormData={this.saveFormData.bind(this)}
                 />

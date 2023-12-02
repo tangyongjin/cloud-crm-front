@@ -1,41 +1,35 @@
 import React from 'react';
-import { message, Popconfirm, Button, Select, Table, Modal } from 'antd';
+import { message, Popconfirm, Button, Select, Table } from 'antd';
 import api from '@/api/api';
+import CommonModal from '@/routes/NanxTable/NanxTableCom/commonModal';
+import IconWrapper from '@/utils/IconWrapper';
 
-import { GithubOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
 export default class RoleAsign extends React.Component {
     constructor(props) {
         super(props);
         this.NanxTableStore = props.NanxTableStore;
-        this.state = {
-            record: null,
-            allRoles: [],
-            currentRoles: [],
-            open: false,
-            role_code: null
-        };
+        this.state = { iconStr: null, record: null, allRoles: [], currentRoles: [], role_code: null };
     }
 
     //eslint-disable-next-line
-    async init() {
+    async init(buttonSource) {
+        this.setState({ iconStr: buttonSource.icon });
         if (this.props.NanxTableStore.selectedRows.length <= 0) {
             message.error('请选择一个用户');
             return;
         }
 
         let currentrow = this.props.NanxTableStore.selectedRows[0];
-        console.log(currentrow);
         this.setState({ allRoles: [], currentRoles: [] });
 
         let res = await api.permission.getAllRoles();
         this.setState({
-            open: true,
             record: currentrow,
             allRoles: res.roles
         });
-
+        this.props.NanxTableStore.showButtonModal();
         await this.getUserRole();
     }
 
@@ -60,7 +54,6 @@ export default class RoleAsign extends React.Component {
     };
 
     deleteUserRole = async (e, record) => {
-        console.log('record: ', record);
         this.setState({ currentRoles: [] });
         let params = { data: { user: record.user, role: record.role_code } };
         await api.permission.deleteUserRole(params);
@@ -68,9 +61,6 @@ export default class RoleAsign extends React.Component {
     };
 
     getOperationButtons(record, rowIndex) {
-        console.log('record: ', record);
-        console.log('rowIndex: ', rowIndex);
-
         return (
             <div className="options">
                 <Popconfirm
@@ -85,10 +75,6 @@ export default class RoleAsign extends React.Component {
             </div>
         );
     }
-
-    handleCancel = () => {
-        this.setState({ open: false });
-    };
 
     columns = [
         {
@@ -117,10 +103,10 @@ export default class RoleAsign extends React.Component {
         return (
             <div>
                 {this.state.record ? (
-                    <Modal
+                    <CommonModal
                         title={
                             <div>
-                                <GithubOutlined />
+                                {IconWrapper(this.state.iconStr)}
                                 分配角色
                             </div>
                         }
@@ -129,11 +115,7 @@ export default class RoleAsign extends React.Component {
                                 关闭
                             </Button>
                         ]}
-                        okText="确认"
-                        onCancel={this.handleCancel}
-                        width="1200px"
-                        open={this.state.open}
-                        destroyOnClose={true}>
+                        width="1200px">
                         {this.state.currentRoles.length > 0 ? (
                             <div style={{ marginTop: '10px' }}>
                                 <h3>已分配的角色:</h3>
@@ -176,7 +158,7 @@ export default class RoleAsign extends React.Component {
                                 </Button>
                             </div>
                         )}
-                    </Modal>
+                    </CommonModal>
                 ) : null}
             </div>
         );

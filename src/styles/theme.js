@@ -7,6 +7,7 @@ const themeJson = {
         colorWarning: '#225e04',
         colorTextBase: '#000000ef',
         borderRadius: 4,
+        borderRadiusLG: 6,
         headerPadding: '150px',
         colorPrimaryHover: '#225e04',
         controlOutlineWidth: 0.5,
@@ -46,19 +47,20 @@ const themeJson = {
             headerBg: '#ffffff',
             siderBg: '#032c05'
         },
+
         Button: {
             controlHeight: '30px',
             defaultBorderColor: '#366503',
-            primaryShadow: '0 0 0 0 #15ff00',
-            defaultShadow: '0px 0px 0px 0px #ffffff',
             defaultColor: 'white',
-            colorBgContainer: '#3B3B47'
+            colorBgContainer: '#366503'
         },
+
         Table: {
             borderColor: '#b3bab0',
             rowSelectedBg: '#748A3D',
             rowSelectedHoverBg: '#748A3D'
         },
+
         Tabs: {
             colorPrimaryActive: 'white',
             cardBg: '#3B3B47',
@@ -86,8 +88,8 @@ const themeJson = {
         },
         Card: {
             actionsBg: 'red',
-            headerFontSize: 12,
-            headerFontSizeSM: 12,
+            // headerFontSize: 14,
+            // headerFontSizeSM: 14,
             headerBg: 'white'
         }
     }

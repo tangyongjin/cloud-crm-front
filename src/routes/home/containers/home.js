@@ -1,36 +1,23 @@
 import React from 'react';
-import '@/UFormExtends';
-import { SchemaForm } from '@uform/antd';
+import { Button } from 'antd';
+import IconWrapper from '@/utils/IconWrapper';
+import '@/UFormPlugin';
 import 'antd/dist/reset.css';
 
 const Home = () => {
-    const formCfg = {
-        type: 'object',
-        'x-component': 'card',
-        properties: {
-            provname: {
-                type: 'string',
-                title: 'provname',
-                required: false,
-                editable: false,
+    const ix = IconWrapper('Bs:BsFileWord');
+    console.log('ix: ', ix);
 
-                'x-props': {
-                    field_id: 'provname'
-                }
-            },
-            dropdown: {
-                type: 'string',
-                title: 'dropdown',
-                required: false,
-                'x-visible': false,
-                'x-props': {
-                    field_id: 'dropdown',
-                    uform_para: ''
-                }
-            }
-        }
-    };
-    return <div style={{ marginTop: '20px', marginLeft: '100px' }}>欢迎页面</div>;
+    return (
+        <div style={{ marginLeft: '40px' }}>
+            欢迎页面
+            <i className="bi-alarm"></i>
+            <h1>boost</h1>
+            <Button icon={ix} htmlType="button">
+                ABCD
+            </Button>
+        </div>
+    );
 };
 
 export default Home;

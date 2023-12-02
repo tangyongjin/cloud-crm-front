@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { message } from 'antd';
-
-import moment from 'moment';
 import { hashHistory } from 'react-router';
 import AuthStore from '@/store/AuthStore';
+import { nowString } from '@/utils/tools';
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -14,16 +13,12 @@ const axiosInstance = axios.create({
     }
 });
 
-let source = axios.CancelToken.source();
-
-function nowString() {
-    const now = moment();
-    const timeString = now.format('HH:mm:ss');
-    return timeString;
-}
+const abortHandler = new AbortController();
 
 axiosInstance.interceptors.request.use(
     function (config) {
+        // console.log('axiosInstance配置: ', config);
+
         const requestId = uuidv4();
         config.requestId = requestId + config.url;
         AuthStore.setLoading(true);
@@ -37,21 +32,6 @@ axiosInstance.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-
-export function post(url, params, config) {
-    axiosInstance.defaults.headers.common['Authorization'] = sessionStorage.getItem('token');
-
-    return new Promise((resolve, reject) => {
-        axiosInstance
-            .post(url, params?.data || {}, { ...config })
-            .then((res) => {
-                resolve(res.data);
-            })
-            .catch((err) => {
-                reject(err.data);
-            });
-    });
-}
 
 const responseSuccess = (response) => {
     // console.log('response: ', response);
@@ -73,7 +53,8 @@ const responseSuccess = (response) => {
 const responseFailed = (error) => {
     AuthStore.delRunnitem(error.config.requestId);
     AuthStore.setLoading(false);
-    source.cancel('Landing Component got unmounted');
+
+    abortHandler.abort();
 
     /***** 接收到异常响应的处理开始 *****/
     if (error && error.response) {
@@ -133,8 +114,31 @@ const responseFailed = (error) => {
         }
         error.message = '连接服务器失败';
     }
-    console.error(error.response);
     return error.response;
 };
+
+export function post(url, params, config) {
+    axiosInstance.defaults.headers.common['Authorization'] = sessionStorage.getItem('token');
+
+    console.log('abortHandler: ', abortHandler);
+    if (!config) {
+        config = {};
+    }
+
+    config.signal = abortHandler.signal;
+
+    return new Promise((resolve, reject) => {
+        axiosInstance
+            .post(url, params?.data || {}, { ...config })
+            .then((res) => {
+                resolve(res.data);
+            })
+            .catch((err) => {
+                reject(err.data);
+            });
+    });
+}
+
+export { abortHandler };
 
 axiosInstance.interceptors.response.use(responseSuccess, responseFailed);

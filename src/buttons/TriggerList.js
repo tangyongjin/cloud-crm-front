@@ -1,53 +1,42 @@
 import React from 'react';
-import { Modal, message, Button } from 'antd';
+import { message, Button } from 'antd';
 import { observer, inject } from 'mobx-react';
-import TriggerListCom from './trigger/TriggerListCom';
+import TriggerListCom from './Trigger/TriggerListCom';
 import { toJS } from 'mobx';
-import { FormatPainterOutlined } from '@ant-design/icons';
+import CommonModal from '@/routes/NanxTable/NanxTableCom/commonModal';
+import IconWrapper from '@/utils/IconWrapper';
 
-@inject('DataGridStore')
+@inject('GridConfigStore')
 @observer
 export default class TriggerList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            open: false
-        };
+        this.state = { iconStr: null };
         this.init = this.init.bind(this);
     }
 
-    async init() {
+    async init(buttonSource) {
+        this.setState({ iconStr: buttonSource.icon });
+
         let { selectedRows } = this.props.NanxTableStore;
         if (selectedRows.length == 0) {
             message.info('必须选择一项');
             return;
         } else {
             let record = selectedRows[0];
-            console.log(record);
-            this.props.DataGridStore.setCurrentActcode(toJS(record).datagrid_code);
-            this.props.DataGridStore.setCurrentDatagridTitle(toJS(record).datagrid_title);
-            this.props.DataGridStore.setCurrentBasetable(toJS(record).base_table);
-            this.props.DataGridStore.prepareDataGirdEnv();
-            this.setState({ open: true });
+            this.props.GridConfigStore.setCurrentDataGridCode(toJS(record).datagrid_code);
+            this.props.GridConfigStore.setCurrentDatagridTitle(toJS(record).datagrid_title);
+            this.props.GridConfigStore.setCurrentBasetable(toJS(record).base_table);
+            this.props.GridConfigStore.prepareDataGirdEnv();
+            this.props.NanxTableStore.showButtonModal();
         }
     }
 
-    onCancel = () => {
-        this.setState({
-            open: false
-        });
-    };
-
     render() {
-        console.log(this.props.DataGridStore);
-
         let { selectedRows } = this.props.NanxTableStore;
         return selectedRows.length > 0 ? (
-            <Modal
-                open={this.state.open}
-                destroyOnClose={true}
+            <CommonModal
                 width={'1300px'}
-                onCancel={this.onCancel}
                 footer={[
                     <Button key="triggerList" type="primary" onClick={this.onCancel}>
                         关闭
@@ -55,12 +44,12 @@ export default class TriggerList extends React.Component {
                 ]}
                 title={
                     <div>
-                        <FormatPainterOutlined />
+                        {IconWrapper(this.state.iconStr)}
                         管理联动
                     </div>
                 }>
-                {this.props.DataGridStore.ColsDbInfo.length == 0 ? null : <TriggerListCom />}
-            </Modal>
+                {this.props.GridConfigStore.ColsDbInfo.length == 0 ? null : <TriggerListCom />}
+            </CommonModal>
         ) : null;
     }
 }

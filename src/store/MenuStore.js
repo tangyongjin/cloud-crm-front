@@ -1,19 +1,18 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import api from '../api/api';
+import IconWrapper from '@/utils/IconWrapper';
 import { randomString, getAllKeys, findMenuPath } from '@/utils/tools';
 import { message } from 'antd';
 
 class _MenuStore {
     @observable randomKey = randomString(10);
     @observable isCollapse = false;
-    @observable openKeys = [];
     @observable currentMenu = {};
     @observable selectedKeys = [];
 
     // 系统所有菜单
     @observable AllMenuList = [];
     @observable AllMenuKeys = [];
-    @observable breadcrumb = '';
     @observable menuPath = [];
 
     // 基于当前登录的角色的菜单
@@ -29,19 +28,52 @@ class _MenuStore {
         role_name: sessionStorage.getItem('role_name')
     };
 
-    @action setMenuPath = (path) => {
-        this.menuPath = path;
-        let opkeys = [];
-        let bread = '';
-        path &&
-            path.forEach((menu) => {
-                bread += menu.title + '/';
-                opkeys.push(menu.key);
-            });
-
-        this.breadcrumb = bread.slice(0, -1);
-        this.setOpenKeys(opkeys);
+    @action setRoleBasedMenuList = (para) => {
+        this.RoleBasedMenuList = para;
     };
+
+    @computed
+    get breadcrumb() {
+        if (!this.currentMenu) {
+            return '';
+        }
+
+        let currentMenyKey = this.currentMenu.key;
+
+        let _path = findMenuPath(this.RoleBasedMenuList, currentMenyKey);
+        let bread = '';
+        _path &&
+            _path.forEach((menu) => {
+                bread += menu.title + '/';
+            });
+        return bread.slice(0, -1);
+    }
+
+    // 给 Menu 的数组
+    // 自动计算菜单项给 antd Menu
+    @computed
+    get RoleMenuArray() {
+        function transformMenuArray(menuArray) {
+            return menuArray.map((item) => {
+                const { key, children, title, menu, router, datagrid_code } = item;
+                const icon = IconWrapper(item.icon);
+                const transformedItem = {
+                    key,
+                    icon,
+                    ...(children && children.length > 0 && { children: transformMenuArray(children) }),
+                    label: title,
+                    menu,
+                    router,
+                    datagrid_code,
+                    type: null
+                };
+                return transformedItem;
+            });
+        }
+
+        let _mit = transformMenuArray(this.RoleBasedMenuList);
+        return _mit;
+    }
 
     @action saveMenuPermission = async (rolecode, menu_level, menuid, parentid) => {
         let params = {
@@ -96,9 +128,8 @@ class _MenuStore {
         };
         let res = await api.permission.getMenuTreeByRoleCode(params);
         if (res.code == 200) {
-            this.RoleBasedMenuList = res.data.menuList;
+            this.setRoleBasedMenuList(res.data.menuList);
             this.RoleUsedKeys = getAllKeys(res.data.menuList);
-            this.refreshBreadcrumbs();
         }
     }
 
@@ -116,27 +147,13 @@ class _MenuStore {
         }
     }
 
-    @action refreshBreadcrumbs = () => {
-        let key = this.getCurrentMenuKeyFromSessionStorage();
-        let path = findMenuPath(this.RoleBasedMenuList, key);
-        this.setMenuPath(path);
-    };
-
     @action getCurrentMenuKeyFromSessionStorage = () => {
         if (sessionStorage.getItem('currentMenu')) {
             let tmp = JSON.parse(sessionStorage.getItem('currentMenu'));
-            return tmp.key;
+            return tmp;
         } else {
             return null;
         }
-    };
-
-    @action onOpenChange = (openKeys) => {
-        this.openKeys = openKeys;
-    };
-
-    @action setOpenKeys = (path) => {
-        this.openKeys = path;
     };
 
     @action clear = () => {
@@ -147,8 +164,9 @@ class _MenuStore {
         sessionStorage.clear();
     };
 
-    @action freshCurrentMenuItem = () => {
+    @action freshRandomKey = () => {
         setTimeout(() => {
+            console.log('freshRandomKey');
             this.randomKey = randomString(10);
         }, 0);
     };
@@ -180,13 +198,16 @@ class _MenuStore {
         this.selectedKeys = key;
     };
 
-    @action setCurrentMenu = (menu) => {
-        // 没有菜单列表时，菜单配置为空处理
-        if (menu == [] || menu == undefined) {
-            return;
-        }
-        this.setSelectedKeys([menu.key]);
+    @action.bound
+    setCurrentMenu = (menu, scense) => {
+        // console.log('scense: ', scense);
+        // console.log('menu: ', menu);
+        // console.log(JSON.stringify(menu));
+
         this.currentMenu = menu;
+        if (menu) {
+            this.setSelectedKeys([menu.key]);
+        }
         sessionStorage.setItem('currentMenu', JSON.stringify(menu));
     };
 }
