@@ -7,7 +7,6 @@ remote_path="/data/nanx/cloud-crm-front/build/"
 # 设置服务器信息
 server_address="119.254.88.173"
 server_username="root"
-server_password="ghxwYzm8"
 
 
 #!/bin/bash
